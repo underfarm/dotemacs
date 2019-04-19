@@ -1,0 +1,25 @@
+ls
+cd ..
+ls
+cd .emacs.d_old_spacemacs/
+ls
+cd ..
+cd .emacs.d_old/
+cd ..
+cd .emacs.d/
+ls
+clear
+ls
+ls
+cd ~
+cd .emacs.d_old_spacemacs/
+ls
+cd ..
+cd .emacs.d
+ls
+clear
+ls
+cd user-site-lisp/
+ls
+ls
+explorer .
