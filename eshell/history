@@ -23,3 +23,100 @@ cd user-site-lisp/
 ls
 ls
 explorer .
+cd ~/Downloads/
+ls
+cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg
+cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg
+cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg -f
+cd ~/repos/
+ls
+cd blog/
+ls
+cd ..
+mv blog/ blog_old
+mkdir blog
+cd blog_old/
+cd ..
+cd blog
+mkdir public
+mkdir partials
+ls
+mkdir org
+mv public/ org/
+ls
+cd org/
+ls
+cd ..
+ls
+clear
+ls
+mv partials/ org
+ls
+mkdir public
+ls
+cd org
+ls
+rm -r public/
+cd ..
+clear
+ls
+┌─[ufarmen@LAPTOP-260NHGME]──[17:37]──[c:/Users/ufarmen/repos/blog]
+ls
+cd org/
+ls
+mkdir posts/test
+mv Test.org posts/test/index.org
+ls
+cd ~
+ls
+rm -rf .org-timestamps/
+rm -rf .org-timestamps//
+rm -rf .org-timestamps//
+rm -rf .org-timestamps/
+ls
+clear
+ls
+cd repos/
+clear
+ls
+cd blog_old/
+ls
+cd ..
+cd blog
+ls
+clear
+ls
+cd org/
+ls
+ls
+cd posts/
+ls
+cd initialize/* ../
+cp ./initialize/* ../
+cp ./test/* ../
+cd ..
+ls
+ls
+rm -rf posts/
+rm theindex.org
+rm theindex.inc 
+ls
+ls
+clear
+ls
+rm sitemap.org 
+cd ..
+cd ..
+mkdir blog2
+cd blog2/
+mkdir org
+mkdir public
+cd org/
+ls
+mkdir post
+cd post/
+ls
+mkdir fantastic
+cd fantastic/
+ls
+rm sitemap.org 

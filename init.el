@@ -11,7 +11,7 @@
       package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/"))
-      inhibit-startup-screen t
+      ;; inhibit-startup-screen t
       auto-window-vscroll nil)
 
 (add-hook 'after-init-hook
@@ -64,9 +64,9 @@
   (funcall mode 0))
 
 
-(dolist (mode
-         '(recentf-mode))
-  (funcall mode 1))
+;; (dolist (mode
+;;          '(recentf-mode))
+;;   (funcall mode 1))
 
 
 ;; My custom modeline
@@ -100,6 +100,13 @@
 (setq version-control t)
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+
+(use-package dashboard
+  :init
+  (add-hook 'after-init-hook 'dashboard-refresh-buffer)
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
 
 (use-package evil
   :ensure t
@@ -278,9 +285,13 @@
 ;;                                                 company-keywords
 ;;                                                 company-capf))))
 
-(use-package org-plus-contrib
+(use-package org
   :mode (("\\.org\\'" . org-mode))
   :config
+
+  (require 'ox-org)
+  (require 'ox-html)
+
   (setq org-startup-indented t
 	org-log-done 'time
 	org-log-into-drawer t)
@@ -290,6 +301,199 @@
    '((powershell . t)
      (dot . t)
      (emacs-lisp . t)))
+
+  ;; Orb publishing 
+
+  (setq my-blog-header-file "~/repos/blog/org/partials/header.html"
+        my-blog-footer-file "~/repos/blog/org/partials/footer.html"
+        org-html-validation-link nil)
+
+  ;; Load partials on memory
+  (defun my-blog-header (arg)
+    (with-temp-buffer
+      (insert-file-contents my-blog-header-file)
+      (buffer-string)))
+
+  (defun my-blog-footer (arg)
+    (with-temp-buffer
+      (insert-file-contents my-blog-footer-file)
+      (buffer-string)))
+
+
+(defun org-publish-sitemap-customised (title list)
+  "Default site map, as a string.
+TITLE is the the title of the site map.  LIST is an internal
+representation for the files to include, as returned by
+`org-list-to-lisp'.  PROJECT is the current project."
+  (concat "#+SETUPFILE: ~/repos/blog/org/setup.setup" "\n\n" "#+TITLE: " title "\n\n" 
+	  (org-list-to-org list)))
+
+;; (defun org-html-add-navigation-after-content-div (string backend info)
+;;   "Put the navigation menu inside the content div."
+;;        (when (and (org-export-derived-backend-p backend 'html)
+;;                   (string-match "div id=\"content\"" string))
+;;          (replace-regexp-in-string "<div id=\"content\">" 
+;; (format 
+;; "
+;; <div class=\"container\" id=\"bootstrap-container\">
+;;   <div class=\"row\">
+;;     <div class=\"col-sm-2\">
+;;       One of three columns
+;;     </div>
+;;     <div class=\"content col-sm-6\">"
+;; )string
+;; )))
+
+;; (add-to-list 'org-export-filter-final-output-functions
+;;              'org-html-add-navigation-after-content-div)
+
+
+(setq org-publish-project-alist
+      '(
+	("blog-notes"
+         :base-directory "~/repos/blog/org"
+         :base-extension "org"
+	 :back-end org-ufarmen-html-template 
+
+
+         :publishing-directory "~/repos/blog/public"
+         :recursive t
+         :publishing-function ufarmen-html-publish-to-html
+         :headline-levels 4
+         :section-numbers nil
+         ;; :html-head nil
+         ;; :html-head-include-default-style nil
+         :html-preamble my-blog-header
+         ;; :html-postamble my-blog-footer
+	 :auto-sitemap t
+	 :sitemap-function org-publish-sitemap-customised
+         :sitemap-title "Home"
+	 :sitemap-style list
+         :sitemap-sort-folders ignore
+         :sitemap-file-entry-format "%d - %t"
+
+	 )
+
+        ;; Define any other projects here...
+        
+          ;; For static files that should remain untouched
+          ("blog-static"
+           :base-directory "~/repos/blog/org/"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|eot\\|svg\\|woff\\|woff2\\|ttf"
+           :publishing-directory "~/Projects/blog/public"
+           :recursive t
+           :publishing-function org-publish-attachment
+           )
+
+          ;; Combine the two previous components in a single one
+          ("blog" :components ("blog-notes" "blog-static"))
+	  ))   
+
+      
+
+;; (defun filter-local-links (link backend info)
+;;   "Filter that converts all the /index.html links to /"
+;;   (if (org-export-derived-backend-p backend 'html)
+;;       (replace-regexp-in-string "/index.html" "/" link)))
+
+;; Do not forget to add the function to the list!
+;; (add-to-list 'org-export-filter-link-functions 'filter-local-links)
+
+
+(defun org-ufarmen-html-template (contents info)
+  "Return complete document string after HTML conversion.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (concat
+   (when (and (not (org-html-html5-p info)) (org-html-xhtml-p info))
+     (let* ((xml-declaration (plist-get info :html-xml-declaration))
+	    (decl (or (and (stringp xml-declaration) xml-declaration)
+		      (cdr (assoc (plist-get info :html-extension)
+				  xml-declaration))
+		      (cdr (assoc "html" xml-declaration))
+		      "")))
+       (when (not (or (not decl) (string= "" decl)))
+	 (format "%s\n"
+		 (format decl
+			 (or (and org-html-coding-system
+				  (fboundp 'coding-system-get)
+				  (coding-system-get org-html-coding-system 'mime-charset))
+			     "iso-8859-1"))))))
+   (org-html-doctype info)
+   "\n"
+   (concat "<html"
+	   (cond ((org-html-xhtml-p info)
+		  (format
+		   " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
+		   (plist-get info :language) (plist-get info :language)))
+		 ((org-html-html5-p info)
+		  (format " lang=\"%s\"" (plist-get info :language))))
+	   ">\n")
+   "<head>\n"
+   (org-html--build-meta-info info)
+   (org-html--build-head info)
+   (org-html--build-mathjax-config info)
+   "</head>\n"
+   "<body>\n"
+   (let ((link-up (org-trim (plist-get info :html-link-up)))
+	 (link-home (org-trim (plist-get info :html-link-home))))
+     (unless (and (string= link-up "") (string= link-home ""))
+       (format (plist-get info :html-home/up-format)
+	       (or link-up link-home)
+	       (or link-home link-up))))
+   ;; Preamble.
+   (org-html--build-pre/postamble 'preamble info)
+   ;; Document contents.
+"
+<div class=\"container\" id=\"bootstrap-container\">
+  <div class=\"row\">
+    <div class=\"col-sm-2\">
+      One of three columns
+    </div>
+    <div class=\"content col-sm-6\">"
+   ;; Document title.
+   (when (plist-get info :with-title)
+     (let ((title (and (plist-get info :with-title)
+		       (plist-get info :title)))
+	   (subtitle (plist-get info :subtitle))
+	   (html5-fancy (org-html--html5-fancy-p info)))
+       (when title
+	 (format
+	  (if html5-fancy
+	      "<header>\n<h1 class=\"title\">%s</h1>\n%s</header>"
+	    "<h1 class=\"title\">%s%s</h1>\n")
+	  (org-export-data title info)
+	  (if subtitle
+	      (format
+	       (if html5-fancy
+		   "<p class=\"subtitle\">%s</p>\n"
+		 (concat "\n" (org-html-close-tag "br" nil info) "\n"
+			 "<span class=\"subtitle\">%s</span>\n"))
+	       (org-export-data subtitle info))
+	    "")))))
+   contents
+
+   "
+    <div class=\"col-sm\">
+      One of three columns madafakka
+    </div>
+  </div>
+</div>
+"
+   ;; (format "</%s>\n" (nth 1 (assq 'content (plist-get info :html-divs))))
+   ;; Postamble.
+   (org-html--build-pre/postamble 'postamble info)
+   ;; Closing document.
+   "</body>\n</html>"))
+
+
+(org-export-define-derived-backend 'ufarmen-html 'html
+  :translate-alist '((template . org-ufarmen-html-template))
+  )
+
+(defun ufarmen-html-publish-to-html (plist filename pub-dir)
+(org-publish-org-to 'ufarmen-html filename ".html" plist pub-dir))
+
   )
 
 (use-package plantuml-mode)
