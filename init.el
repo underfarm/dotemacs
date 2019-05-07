@@ -353,9 +353,6 @@ representation for the files to include, as returned by
 	("blog-notes"
          :base-directory "~/repos/blog/org"
          :base-extension "org"
-	 :back-end org-ufarmen-html-template 
-
-
          :publishing-directory "~/repos/blog/public"
          :recursive t
          :publishing-function ufarmen-html-publish-to-html
@@ -364,7 +361,7 @@ representation for the files to include, as returned by
          ;; :html-head nil
          ;; :html-head-include-default-style nil
          :html-preamble my-blog-header
-         ;; :html-postamble my-blog-footer
+         :html-postamble my-blog-footer
 	 :auto-sitemap t
 	 :sitemap-function org-publish-sitemap-customised
          :sitemap-title "Home"
@@ -450,7 +447,7 @@ holding export options."
     <div class=\"col-sm-2\">
       One of three columns
     </div>
-    <div class=\"content col-sm-6\">"
+    <div id=\"main-content\" class=\"content col-sm-6\">"
    ;; Document title.
    (when (plist-get info :with-title)
      (let ((title (and (plist-get info :with-title)
@@ -474,6 +471,7 @@ holding export options."
    contents
 
    "
+</div>
     <div class=\"col-sm\">
       One of three columns madafakka
     </div>
