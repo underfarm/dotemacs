@@ -50,6 +50,9 @@
 
 (set-face-attribute 'default nil :font "Anonymous Pro" :height 120)
 
+(use-package all-the-icons)
+  
+
 (setq-default prettify-symbols-alist '(("lambda" . ?λ)
                                        ("delta" . ?Δ)
                                        ("gamma" . ?Γ)
@@ -67,6 +70,7 @@
 ;; (dolist (mode
 ;;          '(recentf-mode))
 ;;   (funcall mode 1))
+
 
 
 ;; My custom modeline
@@ -107,6 +111,7 @@
   :ensure t
   :config
   (dashboard-setup-startup-hook))
+
 
 (use-package evil
   :ensure t
@@ -152,6 +157,7 @@
    "pp" 'counsel-projectile
    "qr" 'restart-emacs
    "rr" 'copy-to-register
+   "re" 'recentf-open-files
    "rp" 'insert-register
    "rb" 'revert-buffer-no-confirm
    "sa" 'swiper-all
@@ -175,11 +181,6 @@
    "ir" 'indent-region
    "u" 'browse-url
    "e" 'eval-region-or-buffer))
-
-
-
-   (require 'ob-powershell)
-
 
 ;; Powershell
   (use-package powershell
@@ -212,7 +213,6 @@
   (setq ivy-rich-path-style 'abbrev
         ivy-virtual-abbreviate 'full)
   :config (ivy-rich-mode 1))
-
 
 (use-package which-key
   :config
@@ -258,13 +258,15 @@
   :mode (("\\.el\\'" . emacs-lisp-mode))
   :init
   (add-hook 'emacs-lisp-mode-hook (lambda ()
-    (company-mode)
-    (setq-local company-backends
-                '(company-elisp
-                  company-dabbrev
-                  company-files
-                  company-keywords
-                  company-capf)))))
+				    (company-mode)
+				    (prettify-symbols-mode)
+				    (setq-local company-backends
+						'(company-elisp
+						  company-dabbrev
+						  company-yasnippet
+						  company-files
+						  company-keywords
+						  company-capf)))))
 
 (use-package golden-ratio
   :config
@@ -275,26 +277,41 @@
   (yas-global-mode 1))
   
 
-;; Emacs Lisp
-;; (add-hook 'emacs-lisp-mode-hook (lambda ()
-;;                                   (company-mode)
-;;                                   (setq-local company-backends
-;;                                               '(company-elisp
-;;                                                 company-dabbrev
-;;                                                 company-files
-;;                                                 company-keywords
-;;                                                 company-capf))))
+(use-package org-bullets
+  :config
+  (setq inhibit-compacting-font-caches t
+	org-bullets-compose-leading-stars 'hide
+	org-bullets-bullet-list
+	'("■" "✿" "▲" "▶")))
 
 (use-package org
   :mode (("\\.org\\'" . org-mode))
-  :config
 
+  :load-path ("~/.emacs.d/elpa/org-plus-contrib-20190402")
+
+  :hook
+  (org-babel-after-execute . org-redisplay-inline-images)
+  (org-mode . visual-line-mode)
+  (org-mode . org-indent-mode)
+
+  :config
   (require 'ox-org)
   (require 'ox-html)
 
   (setq org-startup-indented t
 	org-log-done 'time
+	org-pretty-entities t
+	org-hide-leading-stars t
 	org-log-into-drawer t)
+
+  (add-hook 'org-mode-hook (lambda ()
+			     (company-mode)
+			     (setq-local company-backends
+					 '(company-dabbrev
+					   company-files
+					   company-keywords
+					   company-yasnippet
+					   company-capf))))
 
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -396,11 +413,53 @@ representation for the files to include, as returned by
 ;; Do not forget to add the function to the list!
 ;; (add-to-list 'org-export-filter-link-functions 'filter-local-links)
 
+(defun org-ufarmen-sitemap-html-template (contents info)
+  (message "inside custom!")
+  (concat 
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"
+\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">"
+
+"<head>\n"
+(org-html--build-meta-info info)
+(org-html--build-head info)
+(org-html--build-mathjax-config info)
+"</head>\n"
+"<body>\n"
+
+
+"<div class=\"container\" id=\"bootstrap-container\">
+  <div class=\"row\">
+    <div class=\"col-sm-2\">
+      This is from my custom template, mafakka!
+    </div>
+    <div id=\"main-content\" class=\"content col-sm-6\">"
+
+"<h1 class=\"title\">Home</h1>"
+
+contents
+
+"</div>
+    <div class=\"col-sm\">
+      One of three columns madafakka
+    </div>
+  </div>
+</div>"
+
+
+(org-html--build-pre/postamble 'postamble info)
+"</body>\n</html>"))
+
+
 
 (defun org-ufarmen-html-template (contents info)
   "Return complete document string after HTML conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
+  (if (string= "c:/Users/ufarmen/repos/blog/org/sitemap.org" (plist-get info :input-file))
+      (org-ufarmen-sitemap-html-template contents info)
+    (progn 
   (concat
    (when (and (not (org-html-html5-p info)) (org-html-xhtml-p info))
      (let* ((xml-declaration (plist-get info :html-xml-declaration))
@@ -482,7 +541,7 @@ holding export options."
    ;; Postamble.
    (org-html--build-pre/postamble 'postamble info)
    ;; Closing document.
-   "</body>\n</html>"))
+   "</body>\n</html>"))))
 
 
 (org-export-define-derived-backend 'ufarmen-html 'html

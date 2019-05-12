@@ -22,10 +22,6 @@
 (defun org-babel-expand-body:powershell (body params)
   body)
 
-(get-buffer "*powershell-babel*")
-
-(get-buffer "wtf")
-
 (defun buffer-contains-substring (string)
   (save-excursion
     (save-match-data
@@ -33,13 +29,10 @@
       (search-forward string nil t))))
 
 (defun powershell-proc-buff-contains-prompt ()
+  "Searches for powershell prompt in buffer"
 (with-current-buffer "*powershell-babel*"
 			    (goto-char (point-min))
 			    (search-forward-regexp "PS.*>")))
-
-
-(powershell-proc-buff-contains-prompt)
-
 
 
 (defun org-babel-execute:powershell (body params)
@@ -83,47 +76,6 @@ This function is called by `org-babel-execute-src-block'."
   (cancel-timer powershell-timer)
   (setq powershell-timer nil))
 
-
-
-
-(defun piziak-do-when (predicate action)
-  "Execute action when predicate becomes true.
-This sets up a Piziak-style timer."
-  (when (not (null piziak-timer))
-    (error "I am a Bear of Very Little Brain"))
-  (let ((timer (timer-create)))
-    (timer-set-time timer (current-time) piziak-interval)
-    (timer-set-function
-     timer
-     ;; This depends on lexical binding
-     #'(lambda () (when (funcall predicate)
-                    (piziak-cancel)
-                    (funcall action))))
-    (timer-activate timer)
-    (setq piziak-timer timer)))
-
-
-
-
-
-  (when (plist-get args :session)
-
-  (let* ((in-file (org-babel-temp-file "powershell-" ".ps1"))
-         (cmdline (or (cdr (assq :cmdline params))
-                      "-NoLogo -NonInteractive"))
-         (cmd (or (cdr (assq :cmd params))
-                  "powershell")))
-    (with-temp-file in-file
-      (insert (org-babel-expand-body:powershell body params)))
-    (message "cmd: %s" cmd)
-    (message "cmdline: %s" cmdline)
-    (message "in-file: %s" in-file)
-    (message "body: %s" (org-babel-expand-body:powershell body params))
-    (org-babel-eval
-     (concat cmd " " cmdline
-             " -File " (org-babel-process-file-name in-file))
-     "")))
-
 ;; Ulrik: I think we can invoke-command with -filepath and a localhost -session.
 ;; TODO: I think I *can* support sessions in powershell and really want to...
 (defun org-babel-prep-session:powershell (session params)
@@ -166,7 +118,6 @@ specifying a var of the same value."
 (defun org-babel-powershell-initiate-session (&optional session params)
   "test"
   (start-process "powershell" "*powershell-babel*" "powershell" "-NoLogo"))
-
 
 (defvar org-babel-powershell-preface nil)
 

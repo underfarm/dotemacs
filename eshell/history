@@ -1,10 +1,3 @@
-ls
-cd ..
-ls
-cd .emacs.d_old_spacemacs/
-ls
-cd ..
-cd .emacs.d_old/
 cd ..
 cd .emacs.d/
 ls
@@ -120,3 +113,16 @@ mkdir fantastic
 cd fantastic/
 ls
 rm sitemap.org 
+ls
+mkdir ob-powershell
+cd ob-powershell/
+cp ../custom-ob-powershell.el .
+ls
+git init
+git add custom-ob-powershell.el
+git commit -m "Initial commit"
+ls
+pw
+cd fonts/
+ls
+explorer .
