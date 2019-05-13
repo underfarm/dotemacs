@@ -19,6 +19,39 @@
 
 (defvar org-babel-default-header-args:powershell '())
 
+
+(setq powproc (get-buffer-process "*powershell-babel*"))
+
+;; Expertimental TODO
+(defun powershell-filter-process (proc string)
+(while (progn
+	 (with-current-buffer "test"
+	   (insert string))
+	 (accept-process-output))))
+	 
+
+
+
+  (while (search-forward-regexp "PS.*>" nil t)))
+      (accept-process-output powproc 5)
+    
+  (setq original-filter (internal-default-process-filter))
+  (setq my-powershell-prompt 
+
+
+(process-filter (get-buffer-process "*powershell-babel*"))
+(set-process-filter powproc 'powershell-filter-process)
+
+(send-string powproc "'test' | gm | % { $_.name + ',' + $_.membertype + ',' + $_.definition} \n")
+(send-string powproc "\n"
+
+
+
+
+     
+
+  )
+
 (defun org-babel-expand-body:powershell (body params)
   body)
 
