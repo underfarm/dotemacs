@@ -38,61 +38,60 @@
       (buffer-substring-no-properties buffpoint (point-max)))))
 
 ; Experimental - using this for now.
-(defun org-babel-execute:powershell (body params)
-  "Execute a block of Powershell code with Babel.
+ (defun org-babel-execute:powershell (body params)
+   "Execute a block of Powershell code with Babel.
 This function is called by `org-babel-execute-src-block'."
-  (let* ((proc (org-babel-powershell-initiate-session))
-	 (in-file (org-babel-temp-file "powershell-" ".ps1"))
-         (cmdline (or (cdr (assq :cmdline params))
-		      (format ". %s \n" in-file)))
-	 (proc-buffer "*powershell-babel*")
-	 (src-body (org-babel-expand-body:powershell body))
-	 (session (or (cdr (assq :session params))
-		      nil))
-	 (timeout (or (cdr (assq :timeout params))
-		      1)))
-    (with-current-buffer proc-buffer (erase-buffer))
-    ;; with temporary file
-    (if (string= "none" session)
-	(progn
-	  (with-temp-file in-file
-	    (insert src-body))
-	  (send-string proc cmdline)
-	  (evalute-babel-ps-buffer timeout proc-buffer))
-      ;; with session - not file
-      (progn
-	(send-string proc src-body))
-      (evalute-babel-ps-buffer timeout proc-buffer))))
+   (let* ((proc (org-babel-powershell-initiate-session))
+	  (proc-buffer "*powershell-babel*")
+	  (in-file (org-babel-temp-file "powershell-" ".ps1"))
+          (cmdline-filebased (format ". %s \n" in-file))
+	  (src-body (org-babel-expand-body:powershell body))
+	  (session (or (cdr (assq :session params))
+		       nil))
+	  (timeout (or (cdr (assq :timeout params))
+		       1)))
+     (with-current-buffer proc-buffer (erase-buffer))
+     ;; with temporary file
+     (if (string= "none" session)
+	 (progn
+	   (with-temp-file in-file
+	     (insert src-body))
+	   (send-string proc cmdline-filebased)
+	   (evalute-babel-ps-buffer timeout proc-buffer))
+       ;; with session - not file
+       (progn
+	 (send-string proc src-body))
+       (evalute-babel-ps-buffer timeout proc-buffer))))
 
 ;; Works
 ;; Should i use a timer instead - do i need to?
-(defun org-babel-execute:powershell (body params)
-  "Execute a block of Powershell code with Babel.
-This function is called by `org-babel-execute-src-block'."
-  (let* ((in-file (org-babel-temp-file "powershell-" ".ps1"))
-         (cmdline (or (cdr (assq :cmdline params))
-		      (format ". %s \n" in-file)))
-	 (cmd (or (cdr (assq :cmd params))
-		  "powershell"))
-	 (proc (if (get-buffer "*powershell-babel*")
-		   (progn
-		     ;; (message "powershell-buffer exists. Deleting previous information.")
-		     (with-current-buffer "*powershell-babel*"
-		       (erase-buffer))
-		     (get-process "powershell"))
-		 (progn
-		   ;; (message "buffer does not exist - creating new buffer")
-		   (org-babel-powershell-initiate-session)))))
-    (with-temp-file in-file
-      (insert (org-babel-expand-body:powershell body params)))
-    (send-string proc cmdline)
-    (while (eq (powershell-proc-buff-contains-prompt) nil)
-      (sleep-for 0.3))
-    (with-current-buffer "*powershell-babel*"
-      (goto-char (point-min))
-      (next-line)
-      (let ((buffpoint (point)))
-	(buffer-substring-no-properties buffpoint (point-max))))))
+;; (defun org-babel-execute:powershell (body params)
+;;   "Execute a block of Powershell code with Babel.
+;; This function is called by `org-babel-execute-src-block'."
+;;   (let* ((in-file (org-babel-temp-file "powershell-" ".ps1"))
+;;          (cmdline-filebased (or (cdr (assq :cmdline-filebased params))
+;; 		      (format ". %s \n" in-file)))
+;; 	 (cmd (or (cdr (assq :cmd params))
+;; 		  "powershell"))
+;; 	 (proc (if (get-buffer "*powershell-babel*")
+;; 		   (progn
+;; 		     ;; (message "powershell-buffer exists. Deleting previous information.")
+;; 		     (with-current-buffer "*powershell-babel*"
+;; 		       (erase-buffer))
+;; 		     (get-process "powershell"))
+;; 		 (progn
+;; 		   ;; (message "buffer does not exist - creating new buffer")
+;; 		   (org-babel-powershell-initiate-session)))))
+;;     (with-temp-file in-file
+;;       (insert (org-babel-expand-body:powershell body params)))
+;;     (send-string proc cmdline-filebased)
+;;     (while (eq (powershell-proc-buff-contains-prompt) nil)
+;;       (sleep-for 0.3))
+;;     (with-current-buffer "*powershell-babel*"
+;;       (goto-char (point-min))
+;;       (next-line)
+;;       (let ((buffpoint (point)))
+;; 	(buffer-substring-no-properties buffpoint (point-max))))))
 
 
 ;; Ulrik: I think we can invoke-command with -filepath and a localhost -session.

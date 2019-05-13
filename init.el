@@ -1,4 +1,3 @@
-
 ;; Actually, we can win back half of that 0.2s right away with a simple trick:
 ;; Less GC during startup
 
@@ -48,9 +47,10 @@
 ;; Eyecandy
 (load-theme 'material t)
 
-(set-face-attribute 'default nil :font "Anonymous Pro" :height 120)
+;; (set-face-attribute 'default nil :font "Anonymous Pro" :height 120)
+(set-face-attribute 'default nil :font "Consolas" :height 120)
 
-(use-package all-the-icons)
+;; (use-package all-the-icons)
   
 
 (setq-default prettify-symbols-alist '(("lambda" . ?λ)
@@ -126,12 +126,10 @@
   :config
   (global-evil-surround-mode 1))
 
-
 (use-package evil-escape
   :config
   (setq-default evil-escape-key-sequence "fd")
   (evil-escape-mode))
-
 
 (use-package restart-emacs)
 
@@ -166,7 +164,7 @@
    "sd" 'counsel-git-grep               ; search directory
    "ts" 'cycle-spacing
    "u" 'browse-url
-   "w" 'switch-window
+   "w" 'ace-window
    "qr" 'restart-emacs)
 
 
@@ -183,15 +181,18 @@
    "e" 'eval-region-or-buffer))
 
 ;; Powershell
-  (use-package powershell
-    :mode ("\\.ps1\\'" . powershell-mode)
-    :config
-    (require 'ob-powershell)
+(use-package powershell
+  :mode ("\\.ps1\\'" . powershell-mode)
+  :config
+  (require 'ob-powershell)
+  (add-hook 'powershell-mode-hook #'lsp)
 
-    )
-    (add-hook 'powershell-mode-hook #'lsp)
+  )
 
 (use-package smex)
+
+(use-package magit)
+(use-package evil-magit)
 
 (use-package projectile
   :defer t)
@@ -275,6 +276,10 @@
 (use-package yasnippet
   :config
   (yas-global-mode 1))
+
+(use-package ace-window
+  :config
+  (ace-window-display-mode))
   
 
 (use-package org-bullets
@@ -301,6 +306,7 @@
   (setq org-startup-indented t
 	org-log-done 'time
 	org-pretty-entities t
+	org-blank-before-new-entry t
 	org-hide-leading-stars t
 	org-log-into-drawer t)
 
@@ -569,7 +575,7 @@ holding export options."
     (eshell)))
 
 
-  (setq eshell-prompt-function
+(setq eshell-prompt-function
   	    (lambda ()
   	      (concat
   	       (propertize "┌─[" 'face `(:foreground "green"))
