@@ -28,13 +28,13 @@
 	 (with-current-buffer "test"
 	   (insert string))
 	 (accept-process-output))))
+
+
+(setq buffstirng (with-current-buffer "test"
+		   (buffer-substring-no-properties (point-min) (point-max))))
+
+(cdr (s-split "," buffstirng))
 	 
-
-
-
-  (while (search-forward-regexp "PS.*>" nil t)))
-      (accept-process-output powproc 5)
-    
   (setq original-filter (internal-default-process-filter))
   (setq my-powershell-prompt 
 
@@ -42,8 +42,8 @@
 (process-filter (get-buffer-process "*powershell-babel*"))
 (set-process-filter powproc 'powershell-filter-process)
 
-(send-string powproc "'test' | gm | % { $_.name + ',' + $_.membertype + ',' + $_.definition} \n")
-(send-string powproc "\n"
+(send-string powproc "'test' | gm | % { [string]::Format(\"{0},{1},{2}\", $_.name, $_.membertype,$_.definition)} \n"
+(send-string powproc "\n")
 
 
 

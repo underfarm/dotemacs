@@ -135,37 +135,38 @@
 
 (use-package general
   :config
-  (general-evil-setup t)
+  (general-evil-setup)
   (general-define-key :prefix "SPC" :states '(normal)
-   "," 'ubf|eshell-switch
-   "a" 'org-agenda
-   "bm" 'counsel-bookmark
-   "bb" 'switch-to-buffer
-   "c" 'evilnc-comment-or-uncomment-lines
-   "ff" 'counsel-find-file
-   "fed" 'ubf|find-file
-   "fg" 'counsel-git-grep
-   "sa" 'counsel-ag
-   "fb" 'counsel-bookmark
-   "ha" 'apropos
-   "hf" 'counsel-describe-function
-   "hm" 'describe-mode
-   "hv" 'counsel-describe-variable
-   "pa" 'projectile-ag
-   "pp" 'counsel-projectile
-   "qr" 'restart-emacs
-   "rr" 'copy-to-register
-   "re" 'recentf-open-files
-   "rp" 'insert-register
-   "rb" 'revert-buffer-no-confirm
-   "sa" 'swiper-all
-   "sb" 'bookmark-set
-   "ss" 'swiper
-   "sd" 'counsel-git-grep               ; search directory
-   "ts" 'cycle-spacing
-   "u" 'browse-url
-   "w" 'ace-window
-   "qr" 'restart-emacs)
+		      "," 'ubf|eshell-switch
+		      "a" 'org-agenda
+		      "bm" 'counsel-bookmark
+		      "bb" 'switch-to-buffer
+		      "c" 'evilnc-comment-or-uncomment-lines
+		      "ff" 'counsel-find-file
+		      "ef" 'edebug-defun
+		      "fed" 'ubf|find-file
+		      "fg" 'counsel-git-grep
+		      "sa" 'counsel-ag
+		      "fb" 'counsel-bookmark
+		      "ha" 'apropos
+		      "hf" 'counsel-describe-function
+		      "hm" 'describe-mode
+		      "hv" 'counsel-describe-variable
+		      "pa" 'projectile-ag
+		      "pp" 'counsel-projectile
+		      "qr" 'restart-emacs
+		      "rr" 'copy-to-register
+		      "re" 'recentf-open-files
+		      "rp" 'insert-register
+		      "rb" 'revert-buffer-no-confirm
+		      "sa" 'swiper-all
+		      "sb" 'bookmark-set
+		      "ss" 'swiper
+		      "sd" 'counsel-git-grep               ; search directory
+		      "ts" 'cycle-spacing
+		      "u" 'browse-url
+		      "w" 'ace-window
+		      "qr" 'restart-emacs)
 
 
   ;; Visual keybindings - VIM
@@ -269,6 +270,22 @@
 						  company-keywords
 						  company-capf)))))
 
+(use-package parinfer
+  :ensure t
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :init
+  (progn
+    (setq parinfer-extensions
+          '(defaults       ; should be included.
+            pretty-parens  ; different paren styles for different modes.
+            evil           ; If you use Evil.
+            paredit        ; Introduce some paredit commands.
+            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+            smart-yank))   ; Yank behavior depend on mode.
+    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+    (add-hook 'lisp-mode-hook #'parinfer-mode)))
+
 (use-package golden-ratio
   :config
   (golden-ratio-mode 1))
@@ -285,7 +302,7 @@
 (use-package org-bullets
   :config
   (setq inhibit-compacting-font-caches t
-	org-bullets-compose-leading-stars 'hide
+	;; org-bullets-compose-leading-stars 'hide
 	org-bullets-bullet-list
 	'("■" "✿" "▲" "▶")))
 
