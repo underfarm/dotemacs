@@ -1,62 +1,3 @@
-cd ..
-cd .emacs.d/
-ls
-clear
-ls
-ls
-cd ~
-cd .emacs.d_old_spacemacs/
-ls
-cd ..
-cd .emacs.d
-ls
-clear
-ls
-cd user-site-lisp/
-ls
-ls
-explorer .
-cd ~/Downloads/
-ls
-cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg
-cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg
-cp 20190416_204047.jpg  c:/Users/ufarmen/Jottacloud/Pictures/Momos.jpg -f
-cd ~/repos/
-ls
-cd blog/
-ls
-cd ..
-mv blog/ blog_old
-mkdir blog
-cd blog_old/
-cd ..
-cd blog
-mkdir public
-mkdir partials
-ls
-mkdir org
-mv public/ org/
-ls
-cd org/
-ls
-cd ..
-ls
-clear
-ls
-mv partials/ org
-ls
-mkdir public
-ls
-cd org
-ls
-rm -r public/
-cd ..
-clear
-ls
-┌─[ufarmen@LAPTOP-260NHGME]──[17:37]──[c:/Users/ufarmen/repos/blog]
-ls
-cd org/
-ls
 mkdir posts/test
 mv Test.org posts/test/index.org
 ls
@@ -126,3 +67,62 @@ pw
 cd fonts/
 ls
 explorer .
+ls
+cd ~/repos/
+git clone https://github.com/hlissner/emacs-snippets.git
+cd ./emacs-snippets/
+ls
+ls ~/.emacs.d/snippets/
+lsls
+ls
+cp -r snippet-mode/ ~/.emacs.d/snippets
+cp -r emacs-lisp-mode ~/.emacs.d/snippets
+┌─[ufarmen@LAPTOP-260NHGME]──[14:32]──[c:/Users/ufarmen/repos/emacs-snippets]
+ls
+clear
+ls
+git status
+cd ..
+ls
+cd ..
+cd ~/.emacs.d/user-site-lisp/
+ls
+git init
+git status
+git add custom-ob-powershell.el 
+git commit -m "Initial commit"
+cd ..
+ls
+git status
+git add -u
+git add snippets/
+git status
+git status
+git commit -m "Still in the initial stages, boys"
+git push origin master
+git status
+ls
+cd user-site-lisp/
+ls
+rm -rf .git/
+ls
+cd .
+cd ..
+git status
+git add user-site-lisp/custom-ob-powershell.el 
+git add user-site-lisp/custom-ob-powershell.el 
+git commit -m "My own powershell ob for org src blocks"
+git push origin master
+cd ~/.emacs.d
+ls
+cd user-site-lisp/
+ls
+ls
+rm ob-powershell2.el
+ls
+ls
+rm ob-powershell.el
+rm powershellob.txt
+ls
+clear
+ls

@@ -4,22 +4,21 @@
 (require 'ps-ivy)
 
 ;; TEST
-(ps|powershell-initiate-session)
-;; Get-Process -I
+;; Get-Process
 ;; 
 
 (defun company-pscommand-backend (command &optional arg &rest ignored)
+  (unless (get-buffer-process "*powershell-babel*")
+    (ps|powershell-initiate-session))
   (interactive (list 'interactive))
   (setq current-point (point))
   (cl-case command
     (interactive (company-begin-backend 'company-pscommand-backend))
+    (post-completion (insert " "))
     (prefix (when (re-search-backward "\\<\\w+-\\w+"))
             (goto-char current-point)
             (match-string 0))
     (candidates (ps|return-company-candidates arg))))
-    ;; ('ignore-case
-    ;;  'keep-prefix)))
-;; (post-completion (call-interactively #'newline))))
 
 (defun ps|return-company-candidates (arg)
   (let ((res (ps|return-completion-candidates arg

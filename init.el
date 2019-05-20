@@ -30,9 +30,11 @@
 
 (setq use-package-always-ensure t)
 
-
 (setq custom-file "~/.emacs.d/custom-settings.el")
+
 (load custom-file t)
+
+(desktop-save-mode t)
 
 (setq user-full-name "Ulrik B. Farmen"
       user-mail-address "ulrik.bruun.farmen@gmail.com")
@@ -104,14 +106,6 @@
 (setq version-control t)
 (setq vc-make-backup-files t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
-
-(use-package dashboard
-  :init
-  (add-hook 'after-init-hook 'dashboard-refresh-buffer)
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook))
-
 
 (use-package evil
   :ensure t
@@ -185,14 +179,25 @@
 (use-package powershell
   :mode ("\\.ps1\\'" . powershell-mode)
   :config
-  (require 'ob-powershell)
-  (add-hook 'powershell-mode-hook #'lsp)
-
+  (require 'ps-ivy)
+  (require 'company-powershell)
+  (add-hook 'powershell-mode-hook (lambda ()
+			     (company-mode)
+			     (setq-local company-backends
+					 '(company-dabbrev
+					   company-files
+					   company-pscommand-backend
+					   company-keywords
+					   company-yasnippet
+					   company-capf))))
+  ;; (require 'ob-powershell)
+  ;; (add-hook 'powershell-mode-hook #'lsp)
   )
 
 (use-package smex)
 
 (use-package magit)
+
 (use-package evil-magit)
 
 (use-package projectile
@@ -250,10 +255,10 @@
   (add-hook 'js2-mode-hook #'lsp))
 
 
-(use-package lsp-pwsh
-  :load-path "~/.emacs.d/user-site-lisp"
-  :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
-  :defer t)
+;; (use-package lsp-pwsh
+;;   :load-path "~/.emacs.d/user-site-lisp"
+;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
+;;   :defer t)
 
 (use-package emacs-lisp-mode
   :ensure nil
@@ -270,21 +275,11 @@
 						  company-keywords
 						  company-capf)))))
 
-(use-package parinfer
-  :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            evil           ; If you use Evil.
-            paredit        ; Introduce some paredit commands.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
+
+;; Listp Editing
+(use-package smartparens
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'smartparens-mode))
 
 (use-package golden-ratio
   :config
@@ -336,11 +331,11 @@
 					   company-yasnippet
 					   company-capf))))
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((powershell . t)
-     (dot . t)
-     (emacs-lisp . t)))
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages
+  ;;  '((powershell . t)
+  ;;    (dot . t)
+  ;;    (emacs-lisp . t)))
 
   ;; Orb publishing 
 
