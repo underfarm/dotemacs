@@ -56,10 +56,15 @@
   
 
 (setq-default prettify-symbols-alist '(("lambda" . ?λ)
+				       ("[ ]" .  "☐")
+				       ("[X]" . "☑")
+				       ("[-]" . "❍" ) 
                                        ("delta" . ?Δ)
                                        ("gamma" . ?Γ)
                                        ("phi" . ?φ)
                                        ("psi" . ?ψ)))
+
+
 
 (dolist (mode
          '(tool-bar-mode                ; No toolbars, more room for text
@@ -137,7 +142,9 @@
 		      "bb" 'switch-to-buffer
 		      "c" 'evilnc-comment-or-uncomment-lines
 		      "ff" 'counsel-find-file
-		      "ef" 'edebug-defun
+		      "edf" 'edebug-defun
+		      "ee" 'eval
+		      "ef" 'eval-defun
 		      "fed" 'ubf|find-file
 		      "fg" 'counsel-git-grep
 		      "sa" 'counsel-ag
@@ -161,8 +168,6 @@
 		      "u" 'browse-url
 		      "w" 'ace-window
 		      "qr" 'restart-emacs)
-
-
   ;; Visual keybindings - VIM
   (general-define-key
    :prefix "SPC"
@@ -522,7 +527,6 @@ holding export options."
 <div class=\"container\" id=\"bootstrap-container\">
   <div class=\"row\">
     <div class=\"col-sm-2\">
-      One of three columns
     </div>
     <div id=\"main-content\" class=\"content col-sm-6\">"
    ;; Document title.
@@ -550,6 +554,13 @@ holding export options."
    "
 </div>
     <div class=\"col-sm\">
+      <nav id=\"navigation-right\">
+        <ul>
+<li> [ Home ] </li>
+<li> [ Archive ] </li>
+<li> [ About ] </li>
+</ul>
+      </nav>
       One of three columns madafakka
     </div>
   </div>
