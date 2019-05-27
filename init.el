@@ -597,6 +597,32 @@ holding export options."
       (switch-to-buffer (other-buffer (current-buffer) 1))
     (eshell)))
 
+;; (ubf--eshell-paths '("*eshell*"))
+
+(defun ubf--eshell-paths (buffer-names)
+  (let* ((paths (mapcar (lambda (x)
+			  (cons x (with-current-buffer x
+			    (pwd))))
+			buffer-names)))
+    (cl-loop for p in paths
+	     collect (cons (car p) (last (s-split "/" (cdr p) t))))))
+
+(defun ubf|eshell-generate ()
+  (interactive)
+  (let* ((buffs (mapcar 'buffer-name (buffer-list)))
+	 (members (remove nil (mapcar '(lambda (x)
+			   (when (s-contains? "eshell" x) x))
+			  buffs)))
+	 (current-name (buffer-name)))
+    (if (-contains? (ubf--eshell-paths members)  (car (last (s-split "/" (file-name-directory (buffer-file-name)) t))))
+	(message "CONTAINS!!!!"))))
+	
+
+		 )))
+
+  (car (last (s-split "/" (file-name-directory (buffer-file-name)) t)))
+
+
 
 (setq eshell-prompt-function
   	    (lambda ()

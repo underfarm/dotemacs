@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: org-src
+# key: ps
+# --
+
+#+begin_src powershell
+#+end_src
