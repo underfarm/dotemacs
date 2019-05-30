@@ -1,0 +1,25 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("my-evil"
+ (filename . "~/.emacs.d/partials/my-evil.el")
+ (front-context-string . ")\n\n(use-package ")
+ (rear-context-string . "vil-escape-mode)")
+ (position . 362))
+("my-org"
+ (filename . "~/.emacs.d/partials/my-org.el")
+ (front-context-string)
+ (rear-context-string . "rovide 'my-org)\n")
+ (position . 10648))
+("eyecandy"
+ (filename . "~/.emacs.d/partials/my-eyecandy.el")
+ (front-context-string . "ertize (user-log")
+ (rear-context-string . "\n  	       (prop")
+ (position . 1500))
+("Model01-inofile"
+ (filename . "~/repos/hardware/keyboardio/avr/libraries/Model01-Firmware/Model01-Firmware.ino")
+ (front-context-string . "// -*- mode: c++")
+ (rear-context-string)
+ (position . 1))
+)
