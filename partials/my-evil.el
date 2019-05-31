@@ -62,6 +62,7 @@
   (general-define-key
    :prefix "SPC"
    :states '(visual)
+   "<SPC>" 'action-key
    "rr" 'copy-to-register
    "a" 'align-regexp
    "c" 'comment-dwim

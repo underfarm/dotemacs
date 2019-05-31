@@ -4,3 +4,4 @@ smex-items/
 backups/
 recentf/
 auto-savev-list/
+partials/*.elc

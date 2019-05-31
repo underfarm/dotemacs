@@ -1,6 +1,9 @@
 
 ;; Eyecandy
-(load-theme 'gruvbox t)
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox t))
+
 
 ;; (set-face-attribute 'default nil :font "Anonymous Pro" :height 120)
 (set-face-attribute 'default nil :font "Consolas" :height 120)

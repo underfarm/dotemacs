@@ -2,15 +2,13 @@
 ;; Less GC during startup
 
 
-
-
 (setq package-enable-at-startup nil
       message-log-max 16384
       gc-cons-threshold 402653184
       gc-cons-percentage 0.6
       visible-bell t
-      custom-file "~/.emacs.d/custom-settings.el"
       initial-scratch-message ";; ready\n\n"
+      custom-file "~/.emacs.d/custom-settings.el"
       package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/"))
@@ -109,6 +107,35 @@
 (use-package projectile
   :defer t)
 
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0
+        company-echo-delay 0
+        company-dabbrev-downcase nil
+        company-minimum-prefix-length 2
+        company-selection-wrap-around t
+        company-transformers '(company-sort-by-occurrence
+                               company-sort-by-backend-importance))
+
+  ;; Global keys
+  (define-key company-active-map (kbd "C-j") #'company-select-next)
+  (define-key company-active-map (kbd "C-k") #'company-select-previous)
+
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+				    (company-mode)
+				    (prettify-symbols-mode)
+				    (setq-local company-backends
+						'(company-elisp
+						  company-dabbrev
+						  company-yasnippet
+						  company-files
+						  company-keywords
+						  company-capf)))))
+
+
+  )
+
 (use-package counsel
   :config 
   (ivy-mode 1)
@@ -132,6 +159,7 @@
   (setq which-key-idle-delay 0.5)
   (setq which-key-side-window-location 'top))
 
+
 (use-package lsp-mode
   :commands lsp)
 
@@ -149,27 +177,19 @@
 ;;   :load-path "~/.emacs.d/user-site-lisp"
 ;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
 ;;   :defer t)
+(use-package aggressive-indent
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
 
-(use-package emacs-lisp-mode
-  :ensure nil
-  :mode (("\\.el\\'" . emacs-lisp-mode))
-  :init
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-				    (company-mode)
-				    (prettify-symbols-mode)
-				    (setq-local company-backends
-						'(company-elisp
-						  company-dabbrev
-						  company-yasnippet
-						  company-files
-						  company-keywords
-						  company-capf)))))
-
-
-;; Listp Editing
 (use-package smartparens
   :config
   (add-hook 'emacs-lisp-mode-hook #'smartparens-mode))
+
+(use-package magit)
+
+(use-package evil-magit)
+
+;; Listp Editing
 
 (use-package golden-ratio
   :config
