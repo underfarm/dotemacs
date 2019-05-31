@@ -75,7 +75,8 @@
 
 ;; We need to add git to path, if not then magit will complain.
 (setq ubf|additional-exec-paths '(
-			     "c:/Program Files/git/bin"
+				  "c:/Program Files/git/bin"
+				  C:\Program Files\Git\usr\bin
 			     ))
 
 (setenv "PATH" (concat (getenv "PATH") (mapconcat 'identity ubf|additional-exec-paths ";")))
