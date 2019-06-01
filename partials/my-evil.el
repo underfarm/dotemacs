@@ -48,7 +48,9 @@
 		      "hk" 'describe-key'
 		      "hv" 'counsel-describe-variable
 		      "pa" 'projectile-ag
-		      "pp" 'projectile
+		      "pf" 'projectile-find-file
+		      "pa" 'counsel-ag
+		      "ps" 'projectile-switch-project
 		      "qr" 'restart-emacs
 		      "rr" 'copy-to-register
 		      "re" 'recentf-open-files

@@ -136,8 +136,6 @@
 						  company-capf)))))
 
 
-  )
-
 (use-package counsel
   :config 
   (ivy-mode 1)
