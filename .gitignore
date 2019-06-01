@@ -11,3 +11,12 @@ partials/*.elc
 desktop/
 server/
 /.emacs.desktop.lock
+.extension/
+.lsp-pwsh/
+.lsp-session-v1
+auto-save-list/
+init.el~
+network-security.data
+projectile-bookmarks.eld
+projectile.cache
+transient/
