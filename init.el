@@ -76,7 +76,8 @@
 ;; We need to add git to path, if not then magit will complain.
 (setq ubf|additional-exec-paths '(
 				  "c:/Program Files/git/bin"
-				  C:\Program Files\Git\usr\bin
+				  "C:/Program Files/Git/usr/bin"
+				  "C:/Users/ufarmen/scoop/shims"
 			     ))
 
 (setenv "PATH" (concat (getenv "PATH") (mapconcat 'identity ubf|additional-exec-paths ";")))
@@ -105,8 +106,8 @@
 
 (use-package smex)
 
-(use-package projectile
-  :defer t)
+(use-package ag)
+
 
 (use-package company
   :ensure t
@@ -154,6 +155,12 @@
         ivy-virtual-abbreviate 'full)
   :config (ivy-rich-mode 1))
 
+(use-package projectile
+  :after (counsel)
+  :defer t
+  :config
+  (setq projectile-completion-system 'ivy))
+
 (use-package which-key
   :config
   (which-key-mode)
@@ -184,6 +191,7 @@
 
 (use-package smartparens
   :config
+  (require 'smartparens-config)
   (add-hook 'emacs-lisp-mode-hook #'smartparens-mode))
 
 (use-package magit)

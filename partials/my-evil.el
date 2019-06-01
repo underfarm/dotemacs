@@ -4,7 +4,8 @@
   :init
   (setq evil-want-Y-yank-to-eol t)
   :config
-  (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes))
+  (setq evil-emacs-state-modes (delq 'ibuffer-mode evil-emacs-state-modes)
+	evil-auto-indent t)
   (evil-mode))
 
 (use-package evil-surround
@@ -31,20 +32,23 @@
 		      "bc" 'ubf|my-recompile
 		      "bd" 'byte-recompile-directory
 		      "c" 'evilnc-comment-or-uncomment-lines
+		      "dw" 'delete-whitespace-rectangle'
 		      "ff" 'counsel-find-file
 		      "edf" 'edebug-defun
 		      "ee" 'eval
 		      "ef" 'eval-defun
 		      "fed" 'ubf|find-file
 		      "fg" 'counsel-git-grep
+		      "gs" 'magit-status
 		      "sa" 'counsel-ag
 		      "fb" 'counsel-bookmark
 		      "ha" 'apropos
 		      "hf" 'counsel-describe-function
 		      "hm" 'describe-mode
+		      "hk" 'describe-key'
 		      "hv" 'counsel-describe-variable
 		      "pa" 'projectile-ag
-		      "pp" 'counsel-projectile
+		      "pp" 'projectile
 		      "qr" 'restart-emacs
 		      "rr" 'copy-to-register
 		      "re" 'recentf-open-files
@@ -55,6 +59,7 @@
 		      "ss" 'swiper
 		      "sd" 'counsel-git-grep               ; search directory
 		      "ts" 'cycle-spacing
+		      "tw" 'whitespace-trailing
 		      "u" 'browse-url
 		      "w" 'ace-window
 		      "qr" 'restart-emacs)

@@ -8,4 +8,6 @@ partials/*.elc
 /.emacs.desktop
 /recentf
 /smex-items
+desktop/
+server/
 /.emacs.desktop.lock
