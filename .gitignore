@@ -5,3 +5,7 @@ backups/
 recentf/
 auto-savev-list/
 partials/*.elc
+/.emacs.desktop
+/recentf
+/smex-items
+/.emacs.desktop.lock
