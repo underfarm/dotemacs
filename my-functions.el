@@ -10,5 +10,11 @@
       (switch-to-buffer (other-buffer (current-buffer) 1))
     (eshell)))
 
+(defun ubf|my-recompile ()
+  (interactive)
+  (mapc (lambda (name)
+          (byte-compile-file name))
+	(directory-files "~/.emacs.d/partials/" t "\\.el$")))
+
 (provide 'my-functions)
 

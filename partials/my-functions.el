@@ -14,25 +14,23 @@
   (interactive)
   (mapc (lambda (name)
           (byte-compile-file name))
-	(directory-files "~/.emacs.d/partials/" nil "\\.el$")))
+	(directory-files "~/.emacs.d/partials/" t "\\.el$")))
 
-
-(defun my-get-boundary-and-thing (&optional)
+(defun ubf|suround-word (&optional first-char second-char)
   "example of using `bounds-of-thing-at-point'"
   (interactive)
   (let* ((bounds (bounds-of-thing-at-point 'symbol))
 	 (begining (car bounds))
-	 (end (cdr bounds)))
+	 (end (cdr bounds))
+	 (first-char-to-insert (format "\%s" first-char))
+	 (second-char-to-insert (if second-char
+				    (format "\%s" second-char)
+				  (format "\%s" first-char))))
     (save-excursion
-      (cond
-       ()
-
-       )
       (goto-char begining)
-      (insert "\"")
+      (insert first-char-to-insert)
       (goto-char (+ 1 end))
-      (insert "\""))))
-
+      (insert second-char-to-insert))))
 
 (provide 'my-functions)
 
