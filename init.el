@@ -212,3 +212,6 @@
   
 (use-package plantuml-mode)
 (use-package graphviz-dot-mode)
+(use-package ox-hugo
+  :ensure t            ;Auto-install the package from Melpa (optional)
+  :after ox)
