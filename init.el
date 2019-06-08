@@ -182,9 +182,9 @@
   :commands company-lsp
   :config 
   (push 'company-lsp company-backends)
-  (setq company-transformers nil
-	company-lsp-async t
-	company-lsp-cache-candidates nil))
+  (setq company-lsp-async t
+	company-lsp-filter-candidates nil
+	company-lsp-cache-candidates 'auto))
 
 ;; Javascript
 (use-package js2-mode
