@@ -30,7 +30,6 @@
 
 (setq use-package-always-ensure t)
 
-
 (setq user-full-name "Ulrik B. Farmen"
       user-mail-address "ulrik.bruun.farmen@gmail.com")
 
@@ -61,9 +60,9 @@
   (funcall mode 0))
 
 
-(dolist (mode
-	 '(desktop-save-mode))
-  (funcall mode 1))
+;; (dolist (mode
+;; 	 '(desktop-save-mode))
+;;   (funcall mode 1))
 
 ;; Backups
 ;;; Disk space is cheap. Save lots.
@@ -83,27 +82,37 @@
 (setenv "PATH" (concat (getenv "PATH") (mapconcat 'identity ubf|additional-exec-paths ";")))
 (setq exec-path (append exec-path ubf|additional-exec-paths))
 
+(use-package quelpa
+  :init
+  (setq quelpa-upgrade-p nil)
+  :config
+  (quelpa
+   '(quelpa-use-package
+     :fetcher git
+     :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+  (require 'quelpa-use-package))
+
+;; uses the given recipe
+(use-package lsp-pwsh
+  :quelpa (lsp-pwsh :fetcher github :url "kiennq/lsp-powershell")
+  :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
+  :defer t)
 
 ;; Powershell
 (use-package powershell
   :mode ("\\.ps1\\'" . powershell-mode)
   :config
-  (require 'ps-ivy)
-  (require 'company-powershell)
+  ;; (require 'company-powershell)
   (add-hook 'powershell-mode-hook (lambda ()
 				    (company-mode)
 				    (setq-local company-backends
 						'(company-dabbrev
 						  company-files
-						  company-pscommand-backend
 						  company-keywords
 						  company-yasnippet
-						  company-capf))))
-  ;; (require 'ob-powershell)
-  ;; (add-hook 'powershell-mode-hook #'lsp)
+						  company-capf))
+				    (setq-local company-idle-delay 0.2)))
   )
-
-
 
 
 (use-package company
@@ -161,7 +170,6 @@
   (setq which-key-idle-delay 0.5)
   (setq which-key-side-window-location 'left))
 
-
 (use-package lsp-mode
   :commands lsp)
 
@@ -171,7 +179,12 @@
 
 (use-package company-lsp
   :after lsp-mode
-  :commands company-lsp)
+  :commands company-lsp
+  :config 
+  (push 'company-lsp company-backends)
+  (setq company-transformers nil
+	company-lsp-async t
+	company-lsp-cache-candidates nil))
 
 ;; Javascript
 (use-package js2-mode
@@ -180,11 +193,6 @@
   :config 
   (add-hook 'js2-mode-hook #'lsp))
 
-
-;; (use-package lsp-pwsh
-;;   :load-path "~/.emacs.d/user-site-lisp"
-;;   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
-;;   :defer t)
 (use-package aggressive-indent
   :config
   (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))

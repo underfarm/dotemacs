@@ -19,4 +19,6 @@ init.el~
 network-security.data
 projectile-bookmarks.eld
 projectile.cache
+quelpa/
+url/
 transient/
