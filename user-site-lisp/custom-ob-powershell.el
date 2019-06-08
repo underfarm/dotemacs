@@ -37,31 +37,31 @@
     (let ((buffpoint (point)))
       (buffer-substring-no-properties buffpoint (point-max)))))
 
-; Experimental - using this for now.
- (defun org-babel-execute:powershell (body params)
-   "Execute a block of Powershell code with Babel.
+					; Experimental - using this for now.
+(defun org-babel-execute:powershell (body params)
+  "Execute a block of Powershell code with Babel.
 This function is called by `org-babel-execute-src-block'."
-   (let* ((proc (org-babel-powershell-initiate-session))
-	  (proc-buffer "*powershell-babel*")
-	  (in-file (org-babel-temp-file "powershell-" ".ps1"))
-          (cmdline-filebased (format ". %s \n" in-file))
-	  (src-body (org-babel-expand-body:powershell body))
-	  (session (or (cdr (assq :session params))
-		       nil))
-	  (timeout (or (cdr (assq :timeout params))
-		       1)))
-     (with-current-buffer proc-buffer (erase-buffer))
-     ;; with temporary file
-     (if (string= "none" session)
-	 (progn
-	   (with-temp-file in-file
-	     (insert src-body))
-	   (send-string proc cmdline-filebased)
-	   (evalute-babel-ps-buffer timeout proc-buffer))
-       ;; with session - not file
-       (progn
-	 (send-string proc src-body))
-       (evalute-babel-ps-buffer timeout proc-buffer))))
+  (let* ((proc (org-babel-powershell-initiate-session))
+	 (proc-buffer "*powershell-babel*")
+	 (in-file (org-babel-temp-file "powershell-" ".ps1"))
+         (cmdline-filebased (format ". %s \n" in-file))
+	 (src-body (org-babel-expand-body:powershell body nil))
+	 (session (or (cdr (assq :session params))
+		      nil))
+	 (timeout (or (cdr (assq :timeout params))
+		      1)))
+    (with-current-buffer proc-buffer (erase-buffer))
+    ;; with temporary file
+    (if (string= "none" session)
+	(progn
+	  (with-temp-file in-file
+	    (insert src-body))
+	  (send-string proc cmdline-filebased)
+	  (evalute-babel-ps-buffer timeout proc-buffer))
+      ;; with session - not file
+      (progn
+	(send-string proc src-body))
+      (evalute-babel-ps-buffer timeout proc-buffer))))
 
 ;; Works
 ;; Should i use a timer instead - do i need to?
