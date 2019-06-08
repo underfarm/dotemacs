@@ -91,22 +91,19 @@
   (require 'ps-ivy)
   (require 'company-powershell)
   (add-hook 'powershell-mode-hook (lambda ()
-			     (company-mode)
-			     (setq-local company-backends
-					 '(company-dabbrev
-					   company-files
-					   company-pscommand-backend
-					   company-keywords
-					   company-yasnippet
-					   company-capf))))
+				    (company-mode)
+				    (setq-local company-backends
+						'(company-dabbrev
+						  company-files
+						  company-pscommand-backend
+						  company-keywords
+						  company-yasnippet
+						  company-capf))))
   ;; (require 'ob-powershell)
   ;; (add-hook 'powershell-mode-hook #'lsp)
   )
 
 
-(use-package smex)
-
-(use-package ag)
 
 
 (use-package company
@@ -155,7 +152,6 @@
 
 (use-package projectile
   :after (counsel)
-  :defer t
   :config
   (setq projectile-completion-system 'ivy))
 
@@ -163,17 +159,23 @@
   :config
   (which-key-mode)
   (setq which-key-idle-delay 0.5)
-  (setq which-key-side-window-location 'top))
+  (setq which-key-side-window-location 'left))
 
 
 (use-package lsp-mode
   :commands lsp)
 
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
+(use-package lsp-ui
+  :after lsp-mode
+  :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :after lsp-mode
+  :commands company-lsp)
 
 ;; Javascript
 (use-package js2-mode
+  :defer 5
   :mode (("\\.js\\'" . js2-mode))
   :config 
   (add-hook 'js2-mode-hook #'lsp))
@@ -192,15 +194,18 @@
   (require 'smartparens-config)
   (add-hook 'emacs-lisp-mode-hook #'smartparens-mode))
 
-(use-package magit)
+(use-package magit
+  :bind
+  :commands magit-status)
 
-(use-package evil-magit)
+(use-package evil-magit
+  :after magit)
 
 ;; Listp Editing
 
-(use-package golden-ratio
-  :config
-  (golden-ratio-mode 1))
+;; (use-package golden-ratio
+;;   :config
+;;   (golden-ratio-mode 1))
 
 (use-package yasnippet
   :config
@@ -209,9 +214,19 @@
 (use-package ace-window
   :config
   (ace-window-display-mode))
-  
+
 (use-package plantuml-mode)
 (use-package graphviz-dot-mode)
+
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
+
+;; Auxillery packages
+(use-package plantuml-mode
+  :defer 10)
+(use-package graphviz-dot-mode
+  :defer 10)
+
+(use-package smex)
+(use-package ag)

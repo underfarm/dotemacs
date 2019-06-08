@@ -31,10 +31,11 @@
 		      "bb" 'switch-to-buffer
 		      "bc" 'ubf|my-recompile
 		      "bd" 'byte-recompile-directory
+		      "bu" 'browse-url
 		      "c" 'evilnc-comment-or-uncomment-lines
 		      "dw" 'delete-whitespace-rectangle'
 		      "ff" 'counsel-find-file
-		      "edf" 'edebug-defun
+		      "df" 'edebug-defun
 		      "ee" 'eval
 		      "ef" 'eval-defun
 		      "fed" 'ubf|find-file
@@ -62,7 +63,9 @@
 		      "sd" 'counsel-git-grep               ; search directory
 		      "ts" 'cycle-spacing
 		      "tw" 'whitespace-trailing
-		      "u" 'browse-url
+		      "j1" #'(lambda () (interactive) (ubf|suround-word "'"))
+		      "j2" #'(lambda () (interactive) (ubf|suround-word "\""))
+		      "j3" #'(lambda () (interactive) (ubf|suround-word "(" ")"))
 		      "w" 'ace-window
 		      "qr" 'restart-emacs)
   ;; Visual keybindings - VIM
@@ -75,8 +78,6 @@
    "c" 'comment-dwim
    "ts" 'cycle-spacing
    "ir" 'indent-region
-   "u" 'browse-url
    "e" 'eval-region-or-buffer))
-
 
 (provide 'my-evil)
