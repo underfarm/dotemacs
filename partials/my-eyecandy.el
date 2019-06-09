@@ -8,8 +8,13 @@
 ;; (set-face-attribute 'default nil :font "Anonymous Pro" :height 120)
 (set-face-attribute 'default nil :font "Consolas" :height 120)
 
-;; (use-package all-the-icons)
-  
+(use-package all-the-icons
+  :defer 5
+  :config
+  (use-package all-the-icons-dired
+    :config
+    (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
+
 
 (setq-default prettify-symbols-alist '(("lambda" . ?λ)
 				       ("[ ]" .  "☐")

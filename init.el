@@ -1,7 +1,6 @@
 ;; Actually, we can win back half of that 0.2s right away with a simple trick:
 ;; Less GC during startup
 
-
 (setq package-enable-at-startup nil
       message-log-max 16384
       gc-cons-threshold 402653184
@@ -36,22 +35,18 @@
 ;; change all prompts to y or n
 (fset 'yes-or-no-p 'y-or-n-p) 
 
+(load custom-file t)
+
 ;; Custom elisp
 (add-to-list 'load-path "~/.emacs.d/user-site-lisp/")
 (add-to-list 'load-path "~/.emacs.d/partials/")
 
-
-;; Look my own partials
-(load custom-file t)
-
+;; Load my own partials
 (mapc (lambda (name)
 	(require (intern (file-name-sans-extension name))))
       (directory-files "~/.emacs.d/partials/" nil "\\.elc$"))
 
-;; (mapc (lambda (name)
-;;         (byte-compile-file name))
-;;       (directory-files "~/.emacs.d/partials/" t "\\.el$"))
-
+;; Turn off GUI clutter
 (dolist (mode
          '(tool-bar-mode                ; No toolbars, more room for text
            global-auto-revert-mode      ; Reverts the buffer if file has changed
@@ -102,7 +97,6 @@
 (use-package powershell
   :mode ("\\.ps1\\'" . powershell-mode)
   :config
-  ;; (require 'company-powershell)
   (add-hook 'powershell-mode-hook (lambda ()
 				    (company-mode)
 				    (setq-local company-backends
@@ -113,6 +107,21 @@
 						  company-capf))
 				    (setq-local company-idle-delay 0.2)))
   )
+
+(use-package lisp-mode
+  :ensure nil ;; built in mode
+  :init
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+				    (company-mode)
+				    (prettify-symbols-mode)
+				    (setq-local company-backends
+						'(company-elisp
+						  company-dabbrev
+						  company-yasnippet
+						  company-files
+						  company-keywords
+						  company-capf)))))
+
 
 
 (use-package company
@@ -128,18 +137,8 @@
 
   ;; Global keys
   (define-key company-active-map (kbd "C-j") #'company-select-next)
-  (define-key company-active-map (kbd "C-k") #'company-select-previous)
+  (define-key company-active-map (kbd "C-k") #'company-select-previous))
 
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-				    (company-mode)
-				    (prettify-symbols-mode)
-				    (setq-local company-backends
-						'(company-elisp
-						  company-dabbrev
-						  company-yasnippet
-						  company-files
-						  company-keywords
-						  company-capf)))))
 
 
 (use-package counsel
@@ -209,6 +208,10 @@
 (use-package evil-magit
   :after magit)
 
+(use-package dired
+  :ensure nil
+  :config
+  (define-key dired-mode-map (kbd "E") 'ubf|dired-do-compress-to))
 ;; Listp Editing
 
 ;; (use-package golden-ratio
@@ -223,9 +226,6 @@
   :config
   (ace-window-display-mode))
 
-(use-package plantuml-mode)
-(use-package graphviz-dot-mode)
-
 (use-package ox-hugo
   :ensure t            ;Auto-install the package from Melpa (optional)
   :after ox)
@@ -237,4 +237,6 @@
   :defer 10)
 
 (use-package smex)
-(use-package ag)
+
+(use-package ag
+  :defer 5)

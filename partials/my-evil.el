@@ -34,6 +34,7 @@
 		      "bu" 'browse-url
 		      "c" 'evilnc-comment-or-uncomment-lines
 		      "dw" 'delete-whitespace-rectangle'
+		      "dj" 'dired-jump
 		      "ff" 'counsel-find-file
 		      "df" 'edebug-defun
 		      "ee" 'eval
