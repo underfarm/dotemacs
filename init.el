@@ -89,7 +89,7 @@
 
 ;; uses the given recipe
 (use-package lsp-pwsh
-  :quelpa (lsp-pwsh :fetcher github :url "kiennq/lsp-powershell")
+  :quelpa (lsp-pwsh :fetcher github :repo "kiennq/lsp-powershell")
   :hook (powershell-mode . (lambda () (require 'lsp-pwsh) (lsp)))
   :defer t)
 
