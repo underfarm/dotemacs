@@ -1,11 +1,19 @@
-;; Actually, we can win back half of that 0.2s right away with a simple trick:
+
 ;; Less GC during startup
+
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
 
 (setq package-enable-at-startup nil
       message-log-max 16384
       gc-cons-threshold 402653184
       gc-cons-percentage 0.6
-      visible-bell t
+      visible-bell nil
+      ring-bell-function 'ignore
       initial-scratch-message ";; ready\n\n"
       custom-file "~/.emacs.d/custom-settings.el"
       package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
@@ -67,15 +75,21 @@
       backup-directory-alist '(("." . "~/.emacs.d/backups"))
       auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-;; We need to add git to path, if not then magit will complain.
-(setq ubf|additional-exec-paths '(
-				  "c:/Program Files/git/bin"
-				  "C:/Program Files/Git/usr/bin"
-				  "C:/Users/ufarmen/scoop/shims"
-			     ))
+(when (eq system-type 'darwin)
+  (setq ubf|additional-exec-paths '(
+				    "c:/Program Files/git/bin"
+				    "C:/Program Files/Git/usr/bin"
+				    "C:/Users/ufarmen/scoop/shims"
+				    ))
 
-(setenv "PATH" (concat (getenv "PATH") (mapconcat 'identity ubf|additional-exec-paths ";")))
-(setq exec-path (append exec-path ubf|additional-exec-paths))
+  (setenv "PATH" (concat (getenv "PATH") (mapconcat 'identity ubf|additional-exec-paths ";")))
+  (setq exec-path (append exec-path ubf|additional-exec-paths)))
+
+
+(when (eq system-type 'gnu/linux)
+  (add-to-list 'load-path "/opt/mu-1.2.0/mu4e")) ;; Mail client
+
+;; We need to add git to path, if not then magit will complain.
 
 (use-package quelpa
   :init
